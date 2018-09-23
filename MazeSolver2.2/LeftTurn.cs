@@ -9,9 +9,6 @@ namespace MazeSolver2._2
 {
     public class LeftTurn
     {
-
-        public int count = 0;
-        public int len = 0;
         public bool completed;
         
         public List<Node> solve(Maze maze)
@@ -31,15 +28,12 @@ namespace MazeSolver2._2
             var startPos = maze.GetStart().Position();
             var endPos = maze.GetEnd().Position();
 
-            count = 1;
 
             completed = false;
 
             while (true)
             {
                 path.Add(current);
-
-                count++;
 
                 Point position = current.Position();
 
@@ -76,7 +70,6 @@ namespace MazeSolver2._2
 
                 completed = false;
             }
-            len = path.Count;
 
             return path;
 

@@ -108,10 +108,10 @@ namespace MazeSolver2._2
             return array;
         }
 
-        public void OutputMap(bool showNodes, bool addColor, List<Node> path, int count, bool gif, bool completed)
+        public void OutputMap(bool showNodes, bool addColor, List<Node> path, bool gif, bool completed)
         {
             
-            Bitmap myBitmap = new Bitmap(width, height);
+            Bitmap myBitmap = new Bitmap(width, height + 6);
 
             for (int x = 0; x < width; x++)
             {
@@ -151,7 +151,7 @@ namespace MazeSolver2._2
                     Point b = path[i + 1].Position();
 
                     // blue - red;
-                    double rF = (double) i / (double) count;
+                    double rF = (double) i / (double) path.Count;
                     double r = rF * (double) 255;
                     Color color = Color.FromArgb((int) r, 0, 255);
 
@@ -184,7 +184,103 @@ namespace MazeSolver2._2
                 }
             }
 
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = height; y < height + 6; y++)
+                {
+                    myBitmap.SetPixel(x, y, Color.FromArgb(255, 255, 255, 255));
+                }
+            }
+
+            //For Tiny Maps
+            PixelAlpha pixelAlpha = new PixelAlpha();
+            if (width <= 25)
+            {
+                string countS = path.Count.ToString().Length > 1 ? path.Count.ToString() : "0" + path.Count.ToString();
+
+                int currentCharIndex = 0;
+                
+                foreach (var c in countS)
+                {
+                    bool[] currentChar = pixelAlpha.GetPixelCharacter(c);
+                    for (int iy = 0; iy < 5; iy++)
+                    {
+                        for (int ix = 0; ix < 4; ix++)
+                        {
+                            int pixelIndex = iy * 4 + ix;
+                            myBitmap.SetPixel(currentCharIndex * 4 + ix + (1 * currentCharIndex + 1), height + iy + 1, currentChar[pixelIndex] ? Color.Black : Color.White);
+                        }
+                    }
+
+                    currentCharIndex++;
+                }
+            }
+            else if(width >= 75)
+            {
+                string countS = path.Count.ToString().Length > 1 ? "Path Length:" + path.Count: "Path Length:0" + path.Count ;
+
+                int currentCharIndex = 0;
+                
+                foreach (var c in countS)
+                {
+                    bool[] currentChar = pixelAlpha.GetPixelCharacter(c);
+                    for (int iy = 0; iy < 5; iy++)
+                    {
+                        for (int ix = 0; ix < 4; ix++)
+                        {
+                            int pixelIndex = iy * 4 + ix;
+                            myBitmap.SetPixel(currentCharIndex * 4 + ix + (1 * currentCharIndex + 1), height + iy + 1, currentChar[pixelIndex] ? Color.Black : Color.White);
+                        }
+                    }
+
+                    currentCharIndex++;
+                }
+            }
+            else if(width >= 42)
+            {
+                string countS = path.Count.ToString().Length > 1 ? "Length:" + path.Count: "Length:0" + path.Count ;
+
+                int currentCharIndex = 0;
+                
+                foreach (var c in countS)
+                {
+                    bool[] currentChar = pixelAlpha.GetPixelCharacter(c);
+                    for (int iy = 0; iy < 5; iy++)
+                    {
+                        for (int ix = 0; ix < 4; ix++)
+                        {
+                            int pixelIndex = iy * 4 + ix;
+                            myBitmap.SetPixel(currentCharIndex * 4 + ix + (1 * currentCharIndex + 1), height + iy + 1, currentChar[pixelIndex] ? Color.Black : Color.White);
+                        }
+                    }
+
+                    currentCharIndex++;
+                }
+            }
+            else if(width >= 26)
+            {
+                string countS = path.Count.ToString().Length > 1 ? "Len:" + path.Count: "Len:0" + path.Count ;
+
+                int currentCharIndex = 0;
+                
+                foreach (var c in countS)
+                {
+                    bool[] currentChar = pixelAlpha.GetPixelCharacter(c);
+                    for (int iy = 0; iy < 5; iy++)
+                    {
+                        for (int ix = 0; ix < 4; ix++)
+                        {
+                            int pixelIndex = iy * 4 + ix;
+                            myBitmap.SetPixel(currentCharIndex * 4 + ix + (1 * currentCharIndex + 1), height + iy + 1, currentChar[pixelIndex] ? Color.Black : Color.White);
+                        }
+                    }
+
+                    currentCharIndex++;
+                }
+            }
+
             myBitmap.Save(_mazeName + ".png");
+            Console.WriteLine("Completed Path length: " + path.Count);
         }
 
         public void OutputConsoleInfo()

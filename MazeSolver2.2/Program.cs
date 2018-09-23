@@ -267,29 +267,84 @@ namespace MazeSolver2._2
         private void Solve()
         {
             List<Node> path = new List<Node>();
-            int count = 0;
-            int len = 0;
             bool completed = false;
             switch (_method)
             {
                     case "leftturn":
                         LeftTurn leftTurn = new LeftTurn();
                         path = leftTurn.solve(_maze);
-                        count = leftTurn.count;
-                        len = leftTurn.len;
                         completed = leftTurn.completed;
+                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        break;
+                    case "depthfirst":
+                        DepthFirst depthFirst = new DepthFirst();
+                        path = depthFirst.Solve(_maze);
+                        completed = depthFirst.completed;
+                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        break;
+                    case "breadthfirst":
+                        BreadthFirst breadthFirst = new BreadthFirst();
+                        path = breadthFirst.Solve(_maze);
+                        completed = breadthFirst.completed;
+            
+                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        break;
+                    case "dijkstra":
+                        Dijkstra dijkstra = new Dijkstra(_maze);
+                        path = dijkstra.Solve();
+                        completed = dijkstra.completed;
+                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        break;
+                    case "astar":
+                        AStar aStar = new AStar();
+                        path = aStar.Solve(_maze);
+                        completed = aStar.completed;
+                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        break;
+                    case "a":
+                        Dijkstra dijkstraA = new Dijkstra(_maze);
+                        path = dijkstraA.Solve();
+                        completed = dijkstraA.completed;
+                        _maze.SetCustomName(_mazeFileName.Substring(0, _mazeFileName.Length - 4), "Dijkstra", _showNodes);
+                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        
+                        BreadthFirst breadthFirstA = new BreadthFirst();
+                        path = breadthFirstA.Solve(_maze);
+                        completed = breadthFirstA.completed;
+                        _maze.SetCustomName(_mazeFileName.Substring(0, _mazeFileName.Length - 4), "BreadthFirst", _showNodes);
+                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        
+                        DepthFirst depthFirstA = new DepthFirst();
+                        path = depthFirstA.Solve(_maze);
+                        completed = depthFirstA.completed;
+                        _maze.SetCustomName(_mazeFileName.Substring(0, _mazeFileName.Length - 4), "DepthFirst", _showNodes);
+                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        
+                        LeftTurn leftTurnA = new LeftTurn();
+                        path = leftTurnA.solve(_maze);
+                        completed = leftTurnA.completed;
+                        _maze.SetCustomName(_mazeFileName.Substring(0, _mazeFileName.Length - 4), "LeftTurn", _showNodes);
+                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        
+                        AStar aStarA = new AStar();
+                        path = aStarA.Solve(_maze);
+                        completed = aStarA.completed;
+                        _maze.SetCustomName(_mazeFileName.Substring(0, _mazeFileName.Length - 4), "AStar", _showNodes);
+                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
                         break;
             }
-            
-            _maze.OutputMap(_showNodes, _addColor, path, count, _gif, completed);
         }
         
         private void Run(string[] args)
         {
             GetArguments(args);
 
+            //PixelAlpha pix = new PixelAlpha();
+            //pix.Boi();
+            
             if (!string.IsNullOrEmpty(_mazeFileName))
             {
+                
                 
                 Stopwatch setup = new Stopwatch();
                 Console.WriteLine("Starting setup");
