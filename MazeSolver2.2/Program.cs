@@ -17,6 +17,7 @@ namespace MazeSolver2._2
         private bool _showNodes;
         private bool _addColor;
         private bool _gif;
+        private bool _addInfo;
         
         private Maze _maze;
         
@@ -38,7 +39,7 @@ namespace MazeSolver2._2
                 _showNodes = o.ShowNodes;
                 _addColor = o.AddColor;
                 _gif = o.OutputGif;
-
+                _addInfo = o.AddInfo;
             }
 
         }
@@ -267,70 +268,72 @@ namespace MazeSolver2._2
         private void Solve()
         {
             List<Node> path = new List<Node>();
-            bool completed = false;
+            bool completed;
+            
+            //TODO Deadend Filling
             switch (_method)
             {
                     case "leftturn":
                         LeftTurn leftTurn = new LeftTurn();
                         path = leftTurn.solve(_maze);
                         completed = leftTurn.completed;
-                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        _maze.OutputMap(_showNodes, _addColor, path, _addInfo, _gif, completed);
                         break;
                     case "depthfirst":
                         DepthFirst depthFirst = new DepthFirst();
                         path = depthFirst.Solve(_maze);
                         completed = depthFirst.completed;
-                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        _maze.OutputMap(_showNodes, _addColor, path, _addInfo, _gif, completed);
                         break;
                     case "breadthfirst":
                         BreadthFirst breadthFirst = new BreadthFirst();
                         path = breadthFirst.Solve(_maze);
                         completed = breadthFirst.completed;
             
-                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        _maze.OutputMap(_showNodes, _addColor, path, _addInfo, _gif, completed);
                         break;
                     case "dijkstra":
                         Dijkstra dijkstra = new Dijkstra(_maze);
                         path = dijkstra.Solve();
                         completed = dijkstra.completed;
-                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        _maze.OutputMap(_showNodes, _addColor, path, _addInfo, _gif, completed);
                         break;
                     case "astar":
                         AStar aStar = new AStar();
                         path = aStar.Solve(_maze);
                         completed = aStar.completed;
-                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        _maze.OutputMap(_showNodes, _addColor, path, _addInfo, _gif, completed);
                         break;
                     case "a":
                         Dijkstra dijkstraA = new Dijkstra(_maze);
                         path = dijkstraA.Solve();
                         completed = dijkstraA.completed;
                         _maze.SetCustomName(_mazeFileName.Substring(0, _mazeFileName.Length - 4), "Dijkstra", _showNodes);
-                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        _maze.OutputMap(_showNodes, _addColor, path, _addInfo, _gif, completed);
                         
                         BreadthFirst breadthFirstA = new BreadthFirst();
                         path = breadthFirstA.Solve(_maze);
                         completed = breadthFirstA.completed;
                         _maze.SetCustomName(_mazeFileName.Substring(0, _mazeFileName.Length - 4), "BreadthFirst", _showNodes);
-                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        _maze.OutputMap(_showNodes, _addColor, path, _addInfo, _gif, completed);
                         
                         DepthFirst depthFirstA = new DepthFirst();
                         path = depthFirstA.Solve(_maze);
                         completed = depthFirstA.completed;
                         _maze.SetCustomName(_mazeFileName.Substring(0, _mazeFileName.Length - 4), "DepthFirst", _showNodes);
-                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        _maze.OutputMap(_showNodes, _addColor, path, _addInfo, _gif, completed);
                         
                         LeftTurn leftTurnA = new LeftTurn();
                         path = leftTurnA.solve(_maze);
                         completed = leftTurnA.completed;
                         _maze.SetCustomName(_mazeFileName.Substring(0, _mazeFileName.Length - 4), "LeftTurn", _showNodes);
-                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        _maze.OutputMap(_showNodes, _addColor, path, _addInfo, _gif, completed);
                         
                         AStar aStarA = new AStar();
                         path = aStarA.Solve(_maze);
                         completed = aStarA.completed;
                         _maze.SetCustomName(_mazeFileName.Substring(0, _mazeFileName.Length - 4), "AStar", _showNodes);
-                        _maze.OutputMap(_showNodes, _addColor, path, _gif, completed);
+                        _maze.OutputMap(_showNodes, _addColor, path, _addInfo, _gif, completed);
                         break;
             }
         }
@@ -402,6 +405,9 @@ namespace MazeSolver2._2
             
             [Option('g', "gif", DefaultValue = false, HelpText = "Make a gif if the maze gets solved?")]
             public bool OutputGif { get; set; }
+            
+            [Option('f', "info", DefaultValue = true, HelpText = "Adds information about the maze to underneath the maze.")]
+            public bool AddInfo { get; set; }
             
             [ParserState]
             public IParserState LastParserState { get; set; }

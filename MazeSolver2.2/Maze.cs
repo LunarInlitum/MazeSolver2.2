@@ -15,7 +15,7 @@ namespace MazeSolver2._2
 
         private Node _start, _end;
 
-        private string _mazeName;
+        public string mazeName;
 
         public Color BrokenNode = Color.Yellow;
         public Color Dead = Color.DarkMagenta;
@@ -40,7 +40,7 @@ namespace MazeSolver2._2
 
         public void SetCustomName(string name, string method, bool nodes)
         {
-            _mazeName = nodes ? "OUTPUT_" + name + "_" + method + "_" + "nodes" : "OUTPUT_" + name + "_" + method + "_";
+            mazeName = nodes ? "OUTPUT_" + name + "_" + method + "_" + "nodes" : "OUTPUT_" + name + "_" + method + "_";
         }
 
         public void AddNode(Node node)
@@ -108,185 +108,25 @@ namespace MazeSolver2._2
             return array;
         }
 
-        public void OutputMap(bool showNodes, bool addColor, List<Node> path, bool gif, bool completed)
+        public void OutputMap(bool showNodes, bool addColor, List<Node> path, bool addInfo, bool gif, bool completed)
         {
-            
-            Bitmap myBitmap = new Bitmap(width, height + 6);
+            ImageHandler.OutputMap(this, path, showNodes, addColor, completed, addInfo, gif);
+        }
 
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    if (maze[x, y])
-                    {
-                        myBitmap.SetPixel(x, y, Color.Black);
-                    }
-                    else
-                    {
-                        myBitmap.SetPixel(x, y, Color.White);
-                    }
-                }
-            }
+        public bool[,] GetMaze()
+        {
+            return maze;
+        }
 
-            if (showNodes)
-            {
-                foreach (var node in _nodes)
-                {
-                    if (addColor)
-                    {
-                        myBitmap = node.AddColoredPosition(myBitmap);
-                    }
-                    else
-                    {
-                        myBitmap = node.AddPosition(myBitmap);
-                    }
-                }
-            }
-
-            if (completed)
-            {
-                for (int i = 0; i < path.Count - 1; i++)
-                {
-                    Point a = path[i].Position();
-                    Point b = path[i + 1].Position();
-
-                    // blue - red;
-                    double rF = (double) i / (double) path.Count;
-                    double r = rF * (double) 255;
-                    Color color = Color.FromArgb((int) r, 0, 255);
-
-                    myBitmap.SetPixel(path[i].x, path[i].y, color);
-
-                    if (gif)
-                    {
-                        //myBitmap.Save("output/" + _mazeName + "_" + i + ".png");
-                    }
-
-                    if (a.X == b.X)
-                    {
-                        for (int ab = Math.Min(a.Y, b.Y); ab < Math.Max(a.Y, b.Y); ab++)
-                        {
-                            myBitmap.SetPixel(a.X, ab, color);
-                            //if(gif)
-                                //myBitmap.Save("output/" + _mazeName + "_" + i + "_" + ab +".png");
-                        }
-                    }
-
-                    if (a.Y == b.Y)
-                    {
-                        for (int ab = Math.Min(a.X, b.X); ab < Math.Max(a.X, b.X); ab++)
-                        {
-                            myBitmap.SetPixel(ab, a.Y, color);
-                            //if(gif)
-                               // myBitmap.Save("output/" + _mazeName + "_" + i + "_" + ab +".png");
-                        }
-                    }
-                }
-            }
-
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = height; y < height + 6; y++)
-                {
-                    myBitmap.SetPixel(x, y, Color.FromArgb(255, 255, 255, 255));
-                }
-            }
-
-            //For Tiny Maps
-            PixelAlpha pixelAlpha = new PixelAlpha();
-            if (width <= 25)
-            {
-                string countS = path.Count.ToString().Length > 1 ? path.Count.ToString() : "0" + path.Count.ToString();
-
-                int currentCharIndex = 0;
-                
-                foreach (var c in countS)
-                {
-                    bool[] currentChar = pixelAlpha.GetPixelCharacter(c);
-                    for (int iy = 0; iy < 5; iy++)
-                    {
-                        for (int ix = 0; ix < 4; ix++)
-                        {
-                            int pixelIndex = iy * 4 + ix;
-                            myBitmap.SetPixel(currentCharIndex * 4 + ix + (1 * currentCharIndex + 1), height + iy + 1, currentChar[pixelIndex] ? Color.Black : Color.White);
-                        }
-                    }
-
-                    currentCharIndex++;
-                }
-            }
-            else if(width >= 75)
-            {
-                string countS = path.Count.ToString().Length > 1 ? "Path Length:" + path.Count: "Path Length:0" + path.Count ;
-
-                int currentCharIndex = 0;
-                
-                foreach (var c in countS)
-                {
-                    bool[] currentChar = pixelAlpha.GetPixelCharacter(c);
-                    for (int iy = 0; iy < 5; iy++)
-                    {
-                        for (int ix = 0; ix < 4; ix++)
-                        {
-                            int pixelIndex = iy * 4 + ix;
-                            myBitmap.SetPixel(currentCharIndex * 4 + ix + (1 * currentCharIndex + 1), height + iy + 1, currentChar[pixelIndex] ? Color.Black : Color.White);
-                        }
-                    }
-
-                    currentCharIndex++;
-                }
-            }
-            else if(width >= 42)
-            {
-                string countS = path.Count.ToString().Length > 1 ? "Length:" + path.Count: "Length:0" + path.Count ;
-
-                int currentCharIndex = 0;
-                
-                foreach (var c in countS)
-                {
-                    bool[] currentChar = pixelAlpha.GetPixelCharacter(c);
-                    for (int iy = 0; iy < 5; iy++)
-                    {
-                        for (int ix = 0; ix < 4; ix++)
-                        {
-                            int pixelIndex = iy * 4 + ix;
-                            myBitmap.SetPixel(currentCharIndex * 4 + ix + (1 * currentCharIndex + 1), height + iy + 1, currentChar[pixelIndex] ? Color.Black : Color.White);
-                        }
-                    }
-
-                    currentCharIndex++;
-                }
-            }
-            else if(width >= 26)
-            {
-                string countS = path.Count.ToString().Length > 1 ? "Len:" + path.Count: "Len:0" + path.Count ;
-
-                int currentCharIndex = 0;
-                
-                foreach (var c in countS)
-                {
-                    bool[] currentChar = pixelAlpha.GetPixelCharacter(c);
-                    for (int iy = 0; iy < 5; iy++)
-                    {
-                        for (int ix = 0; ix < 4; ix++)
-                        {
-                            int pixelIndex = iy * 4 + ix;
-                            myBitmap.SetPixel(currentCharIndex * 4 + ix + (1 * currentCharIndex + 1), height + iy + 1, currentChar[pixelIndex] ? Color.Black : Color.White);
-                        }
-                    }
-
-                    currentCharIndex++;
-                }
-            }
-
-            myBitmap.Save(_mazeName + ".png");
-            Console.WriteLine("Completed Path length: " + path.Count);
+        public List<Node> GetNodes()
+        {
+            return _nodes;
         }
 
         public void OutputConsoleInfo()
         {
             
-            Console.WriteLine("Completed Path saved as " + _mazeName + ".png");
+            Console.WriteLine("Completed Path saved as " + mazeName + ".png");
             
             Console.WriteLine("Total amount of nodes:\t" + _nodes.Count);
             

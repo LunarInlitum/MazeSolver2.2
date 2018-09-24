@@ -59,6 +59,7 @@
     <Compile Include="Dijkstra.cs" />
     <Compile Include="DirectionFactory.cs" />
     <Compile Include="FibonacciHeap.cs" />
+    <Compile Include="ImageHandler.cs" />
     <Compile Include="LeftTurn.cs" />
     <Compile Include="Maze.cs" />
     <Compile Include="Node.cs" />
